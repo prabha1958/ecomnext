@@ -1,0 +1,21 @@
+{
+  "/_app": "pages/_app.js",
+  "/_document": "pages/_document.js",
+  "/_error": "pages/_error.js",
+  "/api/hello": "pages/api/hello.js",
+  "/login": "pages/login.js",
+  "/product": "pages/product.js",
+  "/register": "pages/register.js",
+  "/allmenclothes": "pages/allmenclothes.js",
+  "/allmobiles": "pages/allmobiles.js",
+  "/allsarees": "pages/allsarees.js",
+  "/allcomputers": "pages/allcomputers.js",
+  "/allwomenclothe": "pages/allwomenclothe.js",
+  "/menclothe/[slug]": "pages/menclothe/[slug].js",
+  "/computer/[slug]": "pages/computer/[slug].js",
+  "/searchresult": "pages/searchresult.js",
+  "/mobile/[slug]": "pages/mobile/[slug].js",
+  "/": "pages/index.js",
+  "/sarees/[slug]": "pages/sarees/[slug].js",
+  "/womenclothe/[slug]": "pages/womenclothe/[slug].js"
+}
