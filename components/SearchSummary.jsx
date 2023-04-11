@@ -15,7 +15,7 @@ export default function SearchSummary({searchstr}) {
         }
         go()
      },[searchstr])
-     console.log(data)
+    
   return (
     <div className="w-full "> 
       <div className="max-w-7xl mx-auto mb-28  ">
@@ -28,7 +28,8 @@ export default function SearchSummary({searchstr}) {
          </div>
          <div className=' my-8 flex flex-col items-start space-y-3 px-3'>
          {data && data.map((item)=>(    
-                <SearchProducts  data={item}/>     
+                <SearchProducts  data={item}/>   
+                
             ))}
          </div>
           

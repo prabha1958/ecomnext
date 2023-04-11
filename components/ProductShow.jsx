@@ -14,6 +14,11 @@ import {  db } from "../firebase/config";
 import moment from 'moment'
 import Ratex from "./Ratex";
 import { v4 as uuid } from "uuid";
+import Review from "./Review";
+import Rate from "./Rate";
+import StarRating from "./StarRating";
+import BuyNow from "./BuyNow";
+
 
 export default function ProductShow({mobile, type }) {
   
@@ -28,6 +33,8 @@ export default function ProductShow({mobile, type }) {
     const [rate,setRate] = useState()
     const [reviews,setReviews] = useState([])
     const [userreview,setUserreview] = useState([])
+    const [open,setOpen] = useState(false)
+    const [openModal,setOpenModal] = useState(false)
 
     useEffect(()=>{
       async function  go(){
@@ -39,7 +46,7 @@ export default function ProductShow({mobile, type }) {
        go()
     },[])
     
-    const other = (allmobiles || []).filter(item=>item.slug.current !== mobile[0].slug.current)
+      const other = (allmobiles || []).filter(item=>item.slug.current !== mobile[0].slug.current)
 
     const handleClick = (id,type)=>{
         router.push({
@@ -115,7 +122,7 @@ export default function ProductShow({mobile, type }) {
 
   const addToCart = async (pid,userid,slug,pname,price)=>{
      
-   const q = query(collection(db,"cart"), where("pid","==",pid))
+   const q = query(collection(db,"cart"), where("pid","==",pid), where("userid","==",currentUser.uid))
    const result = await getDocs(q)
      let exprod = []
     result.forEach((doc)=>{
@@ -134,8 +141,6 @@ export default function ProductShow({mobile, type }) {
    
 }
 
-
-     
    
   
   return (
@@ -174,7 +179,9 @@ export default function ProductShow({mobile, type }) {
          
          <div className="flex-1 flex flex-col px-6 mt-10 md:mt-0 ">
             <p className="text-2xl font-extrabold text-themed4">{mobile[0].shortdesc}</p>
+            <Rate rate={rate} />
             <p className="text-sm font-medium text-gray-500">{mobile[0].fulldesc[0]}</p>
+
             <div className="flex flex-col mt-8 items-start space-y-2">
                  <p className="px-4 py-1 bg-themered rounded-lg text-white text-xl">{Math.trunc(discount)} % off</p>
                 <p className="text-2xl font-bold text-gray-900 ">&#8377; {mobile[0].saleprice} <span className="text-xs font-thin text-gray-600 line-through">mrp :&#8377; {mobile[0].mrp}</span></p>
@@ -182,8 +189,8 @@ export default function ProductShow({mobile, type }) {
             </div>
             {currentUser && (
                <div className=" flex items-start mt-8 justify-sgart gap-2">
-               <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
-               <button className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
+               <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+               <button onClick={()=>addToCart(mobile[0]._id,currentUser.uid,mobile[0].slug.current,mobile[0].name,mobile[0].saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
            </div>
             )}
             
@@ -220,14 +227,14 @@ export default function ProductShow({mobile, type }) {
                           
                             <div className="mt-2 text-left">
                              <p onClick={()=>setOpen(true)} className="text-sm font-medium text-themed4 cursor-pointer">Rate and review this product</p>
-                            {open && <Review handleClose={handleClose} pid = {saree.slug.current} name={currentUser.displayName}/>}
+                            {open && <Review handleClose={handleClose} pid = {mobile[0].slug.current} name={currentUser.displayName}/>}
                              
                             </div>  
                            
                         </>):""}
                    
                     
-                    {currentUser && !userrate && <StarRating pid={saree.slug.current} />}
+                    {currentUser && !userrate && <StarRating pid={mobile[0].slug.current} />}
                     <div className="flex items-center justify-center gap-2">
                     {currentUser && userrate && <p>your rating is</p>}{userrate && <Rate  rate={userrate} />}
                     </div>
@@ -249,6 +256,7 @@ export default function ProductShow({mobile, type }) {
                        ))}
              </div>
             </div>
+            <BuyNow caritem={mobile[0]} setOpenModal={setOpenModal} />
     </div>
   )
 }

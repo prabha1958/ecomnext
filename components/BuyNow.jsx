@@ -9,9 +9,14 @@ import MoreAddress from "./MoreAddress";
 import CartItem from "./CartItem";
 import axios from "axios";
 import OrderPay from "./OrderPay";
+import { groq } from "next-sanity";
+import imageUrlBuilder from "@sanity/image-url";
+import Image from "next/image";
+import { client } from "@/lib/client";
+import BuyNowPay from "./BuyNowPay";
 
 
-export default function Checkout({handleClose, cartitems, deleteItem, total}) {
+export default function BuyNow({handleClose, cartitem, setOpenModal}) {
     const {currentUser, setNotification} = useAuthContext()
     const [address,setAddress] = useState([])
     const [defaultAddress,setDefaultAddress] = useState()
@@ -20,8 +25,9 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
     const [response,setResponse] = useState()
     const [modalOpen,setModalOpen] = useState(false)
     const [isLoading,setIsLoading] = useState(false)
+    const [photo,setPhoto] = useState([])
+    const builder = imageUrlBuilder(client);
   
-
    
 
     useEffect(()=>{
@@ -44,12 +50,23 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
         go()
     },[currentUser])
 
+      
+    useEffect(()=>{
+        async function go(){
+          const query = groq`*[_id == '${cartitem._id}']{image}`
+
+          const result = await client.fetch(query)
+           setPhoto(result)
+        }
+        go()
+    },[cartitem])
+
     const inputs = [
         userid=>currentUser.uid,
         uername=>currentUser.displayName,
         email=>currentUser.email,
         mobile=>currentUser.mobile,
-        amount=>total
+        amount=>cartitem.saleprice
 ]
 
    
@@ -62,14 +79,14 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
              return
         }
        
-        const result =  await axios.post("/api/payorder",{
+        const result =  await axios.post("/api/buynoworder",{
          
             userid:currentUser.uid,
             username:currentUser.displayName,
             email:currentUser.email,
             mobile:currentUser.mobile,
-            amount:total,
-            cartitems,
+            amount:cartitem.saleprice,
+            cartitem,
             address:selAddress,
         })
 
@@ -80,15 +97,14 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
           }
      }
 
- 
-  return (
+return (
     <>
     <div className="fixed top-0 bottom-0 left-0 right-0 opacity-95 flex items-center justify-center   md:items-end md:justify-end  bg-slate-200 lg:py-5 px-0 lg:px-3  overflow-y-auto " >
    
       <div className="w-full mx-auto my-auto lg:w-2/3 opacity-100 lg:py-10 px-5 lg:px-10 mb-20  ">  
          <div className="mt-28">
           <div className="w-full text-right  px-4 ">
-                   <p onClick={()=>handleClose()} className="cursor-pointer">Close</p> 
+                   <p onClick={()=>setOpenModal(false)} className="cursor-pointer">Close</p> 
           </div>  
           <div className="w-full text-center my-4 px-4 ">
                    <p className="text-2xl font-bold text-themed4">CHECKOUT </p> 
@@ -132,11 +148,22 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
                        <p onClick={()=>setOpen(true)} className="text-xs font-bold text-themeblue cursor-pointer">add addresses</p>
                </div>
                <div className="flex flex-col space-y-2 px-5 overflow-y-auto">
-               {cartitems.length >0 && cartitems.map((item,index)=>(
-                      <CartItem key={index} cartitems={item} sno={index+1} deleteItem={deleteItem}  />
-                    )) }
-                 {total>0 && <div className="w-full text-center mt-4 "> <span className="text-sm font-normal text-gray-700">Total amount</span>&nbsp;&nbsp;<span className="text-xl font-extrabold text-themed4">{total}</span></div>} 
-
+                         <p>Item under purchase</p>
+               <div className="w-96 flex items-center justify-evenly gap-4">
+                       
+                          {photo.length>0 && photo.map((item,index)=>(
+                                <Image  src={builder.image(item.image[index]).width(40).height(60).url()} 
+                                width={40}
+                                height={60}
+                                className=" w-8 h-10 object-cover hidden md:block"
+                                alt="product name"
+                                />
+                            ))} 
+                        <p className="text-sm font-bold text-themed3">{cartitem.name}</p>     
+                        <p className="text-sm font-bold text-gray-600">{cartitem.saleprice}</p>    
+                                                
+                </div>
+                <p>Amount to be pad: <span>{cartitem.saleprice}</span></p>  
                   <p>Pay with</p>
                   {!isLoading && <img onClick={orderCreate}  src="/razorpay.png" className=" w-1/3 rounded-lg cursor-pointer"/>}
                   {isLoading && 
@@ -152,7 +179,7 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
            </div>    
            </div>
        {open && <MoreAddress  setOpen={setOpen}/>}
-       {modalOpen && <OrderPay data={response} setModalOpen={setModalOpen} setOpen={setOpen} />}
+       {modalOpen && <BuyNowPay data={response} setModalOpen={setModalOpen} setOpen={setOpen} />}
         </div>
     </div>
   

@@ -23,7 +23,7 @@ export default function SearchProducts({data}) {
             }
           })
     }
-
+console.log(data)
 
     useEffect(()=>{
       const q = query(collection(db,"ratings"), where("pid","==", data.slug.current))

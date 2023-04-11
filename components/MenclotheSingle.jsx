@@ -112,13 +112,15 @@ export default function MenclotheSingle({menclothe }) {
                setNotification("You must login to add items to cart")
                router.push({pathname:"/login"})
            }
-         const q = query(collection(db,"cart"), where("pid","==",pid))
+         const q = query(collection(db,"cart"), where("pid","==",pid), where("userid","==",currentUser.uid))
+        
          const result = await getDocs(q)
            let exprod = []
           result.forEach((doc)=>{
              exprod.push(doc.data())
           })
-          if(exprod.length <1){
+          console.log(exprod)
+          if(exprod.length == 0){
             setDoc(doc(db,"cart",uuid()),{
                pid,
                userid,

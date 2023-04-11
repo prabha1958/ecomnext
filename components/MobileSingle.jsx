@@ -106,14 +106,15 @@ export default function MobileSingle({mobile }) {
 
 
      const addToCart = async (pid,userid,slug,pname,price)=>{
-        
-      const q = query(collection(db,"cart"), where("pid","==",pid))
+     
+      const q = query(collection(db,"cart"), where("pid","==",pid), where("userid","==",currentUser.uid))
       const result = await getDocs(q)
         let exprod = []
        result.forEach((doc)=>{
           exprod.push(doc.data())
        })
-       if(exprod.length <1){
+      
+       if(exprod.length == 0){
          setDoc(doc(db,"cart",uuid()),{
             pid,
             userid,

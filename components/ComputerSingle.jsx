@@ -16,6 +16,7 @@ import OtherRelated from "./OtherRelated";
 import Ratex from "./Ratex";
 import moment from 'moment'
 import { v4 as uuid } from "uuid";
+import BuyNow from "./BuyNow";
 
 export default function ComputerSingle({computer }) {
   
@@ -25,11 +26,12 @@ export default function ComputerSingle({computer }) {
     const [allcomputers, setAllcomputers] = useState()
     const [code,setCode] = useState(computer.category)
     const [open,setOpen] = useState(false)
-    const {currentUser,getrate} = useAuthContext()
+    const {currentUser} = useAuthContext()
     const [userrate,setUserrate] = useState(null)
     const [rate,setRate] =useState()
     const [userreview,setUserreview] = useState([])
     const [reviews,setReviews] = useState([])
+    const [openModal,setOpenModal]= useState(false)
     
    
 
@@ -106,13 +108,13 @@ export default function ComputerSingle({computer }) {
 
         const addToCart = async (pid,userid,slug,pname,price)=>{
            
-            const q = query(collection(db,"cart"), where("pid","==",pid))
+            const q = query(collection(db,"cart"), where("pid","==",pid), where("userid","==",currentUser.uid))
             const result = await getDocs(q)
               let exprod = []
              result.forEach((doc)=>{
                 exprod.push(doc.data())
              })
-             if(exprod.length <1){
+             if(exprod.length == 0){
                setDoc(doc(db,"cart",uuid()),{
                   pid,
                   userid,
@@ -172,7 +174,7 @@ export default function ComputerSingle({computer }) {
             </div>
             {currentUser && (
                   <div className=" flex items-start mt-8 justify-sgart gap-2">
-                  <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                   <button onClick={()=>addToCart(computer._id,currentUser.uid,computer.slug.current,computer.name,computer.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
               </div>
             )}
@@ -236,7 +238,7 @@ export default function ComputerSingle({computer }) {
                        ))}
              </div>
             </div>
-
+           {openModal && <BuyNow cartitem = {computer} setOpenModal={setOpenModal} />}
     </div>
   )
 }
