@@ -43,9 +43,10 @@ export default function OrderPay({data, setModalOpen,setOpen}) {
                 });
                if(result.data.payment){
                   setDoc(doc(db,"orders",response.razorpay_order_id),{
+                    userid:currentUser.uid,
                     orderid:response.razorpay_order_id,
                     paymentid:response.razorpay_payment_id,
-                    amount:data.amount,
+                    amount:data.amount/100,
                     items:data.cartitems,
                     paymentdate:Date.now(),
                     shipping:data.address,

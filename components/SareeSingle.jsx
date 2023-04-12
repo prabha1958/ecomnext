@@ -16,6 +16,7 @@ import OtherRelated from "./OtherRelated";
 import moment from 'moment'
 import Ratex from "./Ratex";
 import { v4 as uuid } from "uuid";
+import BuyNow from "./BuyNow";
 
 export default function SareeSingle({saree }) {
   
@@ -30,6 +31,7 @@ export default function SareeSingle({saree }) {
     const [rate,setRate] = useState()
     const [reviews,setReviews] = useState([])
     const [userreview,setUserreview] = useState([])
+    const [openModal,setOpenModal] = useState(false)
 
 
     useEffect(()=>{
@@ -173,7 +175,7 @@ export default function SareeSingle({saree }) {
             </div>
             {currentUser && (
                    <div className=" flex items-start mt-8 justify-sgart gap-2">
-                   <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                   <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                    <button onClick={()=>addToCart(saree._id,currentUser.uid,saree.slug.current,saree.name,saree.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
                </div>
             )}
@@ -239,6 +241,7 @@ export default function SareeSingle({saree }) {
                        ))}
              </div>
             </div>
+            {openModal && <BuyNow cartitem={saree} setOpenModal={setOpenModal} />}
     </div>
   )
 }

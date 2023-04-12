@@ -14,6 +14,7 @@ export default function Navbar() {
     const {currentUser, logout, notification} = useAuthContext()
     const [cartitems,setCartitems] = useState([])
     const [cartOpen,setCartOpen] = useState(false)
+    const [profOpen,setProfOpen] = useState(false)
    
 
 
@@ -41,6 +42,32 @@ export default function Navbar() {
        go()
       }
      },[currentUser])
+
+
+   
+
+
+
+
+     useEffect(()=>{
+      if(currentUser){  
+       async function go(){
+          const q = query(collection(db,"cart"),where("userid","==",currentUser.uid))
+          const res =  onSnapshot(q,(snapshot)=>{
+              let result = []
+               snapshot.docs.forEach((doc)=>{
+                   result.push({...doc.data(), id:doc.id})
+                  
+               })
+             
+               setCartitems(result)
+               
+          })
+       }
+       go()
+      }
+     },[currentUser])
+
 
      const cartClose = ()=>{
       setCartOpen(false)
@@ -80,8 +107,16 @@ export default function Navbar() {
                      <img src="/cart.png"  className=" w-8 h-6 mx-2" />
                      {cartitems.length>0 && <p className="absolute p-0.5 rounded-full bg-red-600 text-xs font-bold text-themel4 left-4 -top-2">{cartitems.length}</p>}
                    </div>
-                    
-                  <p className="text-md font-thin text-themel4 cursor-pointer">{currentUser.displayName}</p>
+                  <div onMouseEnter={()=>setProfOpen(true)} onMouseLeave={()=>setProfOpen(false)}  className="relative block">
+                     <p className="text-md font-thin text-themel4 cursor-pointer">{currentUser.displayName}</p>
+                     {profOpen && (
+                         <div className=" w-36 px-3 rounded-lg bg-themel3 py-4 absolute">
+                           <Link href="/orders"><p className="text-xs font-bold text-themed3 cursor-pointer">orders</p></Link>
+                         </div>
+                     )}
+                       
+                  </div>  
+                 
                   <button onClick={handleClick} className="text-md px-2 py-1 bg-themed4 font-thin text-themel4 cursor-pointer">Logout</button>
                  
 

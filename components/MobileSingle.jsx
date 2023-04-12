@@ -16,6 +16,7 @@ import OtherRelated from "./OtherRelated";
 import Ratex from "./Ratex";
 import moment from 'moment'
 import { v4 as uuid } from "uuid";
+import BuyNow from "./BuyNow";
 
 export default function MobileSingle({mobile }) {
   
@@ -30,6 +31,9 @@ export default function MobileSingle({mobile }) {
     const [rate,setRate] = useState()
     const [userreview,setUserreview] = useState([])
     const [reviews,setReviews] = useState([])
+    const [openModal,setOpenModal] = useState(false)
+    const [items, setItems] = useState([])
+   
 
     useEffect(()=>{
       async function  go(){
@@ -127,7 +131,20 @@ export default function MobileSingle({mobile }) {
       
   }
 
+      const buynow = (mobile)=>{
 
+
+        const cartbox = {
+         pid:mobile._id,
+         userid:currentUser.uid,
+         slug:mobile.slug.current,
+         pname:mobile.name,
+         price:mobile.saleprice
+       }
+        setItems(cartbox)
+        setOpenModal(true)
+      
+      }
    
   
   return (
@@ -175,7 +192,7 @@ export default function MobileSingle({mobile }) {
             </div>
             {currentUser && (
                   <div className=" flex items-start mt-8 justify-sgart gap-2">
-                  <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>buynow(mobile)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                   <button onClick={()=>addToCart(mobile._id,currentUser.uid,mobile.slug.current,mobile.name,mobile.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
               </div>
             )}
@@ -239,7 +256,7 @@ export default function MobileSingle({mobile }) {
                        ))}
              </div>
             </div>
-
+             {openModal && <BuyNow cartitem={items} setOpenModal={setOpenModal} />}
     </div>
   )
 }

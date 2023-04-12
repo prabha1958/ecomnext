@@ -44,10 +44,11 @@ export default function BuyNowPay({data, setModalOpen,setOpen}) {
                 });
                if(result.data.payment){
                   setDoc(doc(db,"orders",response.razorpay_order_id),{
+                    userid:currentUser.uid,
                     orderid:response.razorpay_order_id,
                     paymentid:response.razorpay_payment_id,
-                    amount:data.amount,
-                    items:data.cartitems,
+                    amount:data.amount/100,
+                    items:[data.cartitems],
                     paymentdate:Date.now(),
                     shipping:data.address,
                     dispatched:"",
@@ -101,7 +102,7 @@ if(!success){
                <p className='text-xl font-semibold text-themed4' >Pay your Order</p>
                <p><span className='text-xs font-bold text-gray-700'>OrderId:</span>&nbsp;&nbsp;<span className='text-sm font-semibod text-themed4'>{data.orderId}</span></p>
                <p><span className='text-xs font-bold text-gray-700'>Total Amount:</span>&nbsp;&nbsp;<span className='text-xl font-semibod text-themed4'>{data.amount/100}</span></p>
-               <p><span className='text-xs font-bold text-gray-700'>Payment for:</span>&nbsp;&nbsp; {data.cartitems.name}</p>
+               <p><span className='text-xs font-bold text-gray-700'>Payment for:</span>&nbsp;&nbsp; {data.cartitems.pname}</p>
                
             </div> 
               <button onClick={handleClick} className='px-3 py-2 bg-green-500 rounded-md text-white font-bold'>PAY</button>

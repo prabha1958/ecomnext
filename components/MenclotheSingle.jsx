@@ -16,6 +16,7 @@ import moment from 'moment'
 import { collection,query,where, onSnapshot,doc, setDoc,getDocs  } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import { useRouter } from "next/router";
+import BuyNow from "./BuyNow";
 
 export default function MenclotheSingle({menclothe }) {
   
@@ -31,6 +32,7 @@ export default function MenclotheSingle({menclothe }) {
     const [userreview,setUserreview] = useState([])
     const [reviews,setReviews] = useState([])
     const router = useRouter()
+    const [openModal,setOpenModal]= useState(false)
    
    
     useEffect(()=>{
@@ -181,7 +183,7 @@ export default function MenclotheSingle({menclothe }) {
             </div>
             {currentUser && (
                 <div className=" flex items-start mt-8 justify-sgart gap-2">
-                <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                 <button onClick={()=>addToCart(menclothe._id,currentUser.uid,menclothe.slug.current,menclothe.name,menclothe.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
             </div>
             )}
@@ -245,7 +247,7 @@ export default function MenclotheSingle({menclothe }) {
                        ))}
              </div>
             </div>
-
+            {openModal && <BuyNow cartitem = {menclothe} setOpenModal={setOpenModal} />}
     </div>
   )
 }

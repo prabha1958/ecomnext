@@ -256,7 +256,7 @@ export default function ProductShow({mobile, type }) {
                        ))}
              </div>
             </div>
-            <BuyNow caritem={mobile[0]} setOpenModal={setOpenModal} />
+            {openModal && <BuyNow cartitem={mobile[0]} setOpenModal={setOpenModal} />}
     </div>
   )
 }

@@ -16,6 +16,7 @@ import OtherRelated from "./OtherRelated";
 import moment from 'moment'
 import Ratex from "./Ratex";
 import { v4 as uuid } from "uuid";
+import BuyNow from "./BuyNow";
 
 export default function WomenclotheSingle({womenclothe }) {
   
@@ -30,6 +31,7 @@ export default function WomenclotheSingle({womenclothe }) {
     const [rate,setRate] = useState()
     const [reviews,setReviews] = useState([])
     const [userreview,setUserreview] = useState([])
+    const [openModal,setOpenModal] = useState(false)
 
    
     useEffect(()=>{
@@ -180,7 +182,7 @@ export default function WomenclotheSingle({womenclothe }) {
             </div>
             {currentUser && (
                   <div className=" flex items-start mt-8 justify-sgart gap-2">
-                  <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                   <button onClick={()=>addToCart(womenclothe._id,currentUser.uid,womenclothe.slug.current,womenclothe.name,womenclothe.saleprice)}  className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
               </div>
             )}
@@ -264,7 +266,7 @@ export default function WomenclotheSingle({womenclothe }) {
                        ))}
              </div>
             </div>
-           
+             {openModal && <BuyNow cartitem={womenclothe} setOpenModal={setOpenModal} />}
     </div>
   )
 }

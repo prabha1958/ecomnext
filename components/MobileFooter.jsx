@@ -6,6 +6,7 @@ import Message from "./Message"
 import MobileMenu from "./MobileMenu"
 import { collection,query,where, onSnapshot,doc, setDoc,getDocs,deleteDoc  } from "firebase/firestore";
 import {  db } from "../firebase/config";
+import Account from "./Account"
 
 
 
@@ -15,6 +16,7 @@ export default function MobileFooter() {
     const {currentUser, logout, notification} = useAuthContext()
     const [cartitems,setCartitems] = useState([])
     const [cartOpen,setCartOpen] = useState(false)
+    const [accountOpen,setAccountOpen] = useState(false)
     
    const handleClose = ()=>{
     setMenuOpen(false)
@@ -78,6 +80,8 @@ export default function MobileFooter() {
          </div>
         )}
 
+        <img onClick={()=>setAccountOpen(true)} src="/account.png" className="w-8 h-8 " alt="account" />
+
                   <div onClick={()=>setCartOpen(true)} className="relative block cursor-pointer">
                      <img src="/cart.png" className=" w-8 h-6 mx-2" />
                      {cartitems.length>0 && <p className="absolute p-0.5 rounded-full bg-red-600 text-xs font-bold text-themel4 left-4 -top-2">{cartitems.length}</p>}
@@ -87,6 +91,7 @@ export default function MobileFooter() {
     </div>
     {cartOpen && <Cart cartitems={cartitems} cartClose={cartClose} deleteItem={deleteItem}/>}
       {notification && <Message notification={notification} />}
+      {accountOpen && <Account setAccountOpen={setAccountOpen}/>}
     </> 
   )
 }

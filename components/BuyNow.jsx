@@ -85,7 +85,7 @@ export default function BuyNow({handleClose, cartitem, setOpenModal}) {
             username:currentUser.displayName,
             email:currentUser.email,
             mobile:currentUser.mobile,
-            amount:cartitem.saleprice,
+            amount:cartitem.price,
             cartitem,
             address:selAddress,
         })

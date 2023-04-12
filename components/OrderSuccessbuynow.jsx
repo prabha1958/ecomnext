@@ -6,6 +6,11 @@ import React from 'react'
 export default function Ordersuccessbuynow({data, setSuccess}) {
    const {currentUser} = useAuthContext()
    const router = useRouter()
+
+   const handleClick = ()=>{
+     router.push({pathname:"/"})
+     window.location.reload()
+   }
   return (
     <div className='fixed top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-themed2 opacity-95'>
         <div className='w-2/3 flex flex-col space-y-2 mx-auto bg-white p-4 rounded-lg '>
@@ -26,7 +31,7 @@ export default function Ordersuccessbuynow({data, setSuccess}) {
                      </div>
                     
                     <div className='w-full text-center'>
-                         <Link href="/"><button onClick={()=>window.location.reload()}  className="px-3 py-2 bg-green-600 text-white font-bold">CONTINUE SHOPPING</button></Link>
+                         <button onClick={handleClick}  className="px-3 py-2 bg-green-600 text-white font-bold">CONTINUE SHOPPING</button>
                     </div>
 
              </div>
