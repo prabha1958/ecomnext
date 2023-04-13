@@ -35,6 +35,7 @@ export default function ProductShow({mobile, type }) {
     const [userreview,setUserreview] = useState([])
     const [open,setOpen] = useState(false)
     const [openModal,setOpenModal] = useState(false)
+    const [items,setItems] = useState([])
 
     useEffect(()=>{
       async function  go(){
@@ -141,6 +142,22 @@ export default function ProductShow({mobile, type }) {
    
 }
 
+const buynow = (mobile)=>{
+
+
+   const cartbox = {
+    pid:mobile._id,
+    userid:currentUser.uid,
+    slug:mobile.slug.current,
+    pname:mobile.name,
+    price:mobile.saleprice
+  }
+   setItems(cartbox)
+   setOpenModal(true)
+ 
+ }
+
+
    
   
   return (
@@ -189,7 +206,7 @@ export default function ProductShow({mobile, type }) {
             </div>
             {currentUser && (
                <div className=" flex items-start mt-8 justify-sgart gap-2">
-               <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+               <button onClick={()=>buynow(mobile[0])} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                <button onClick={()=>addToCart(mobile[0]._id,currentUser.uid,mobile[0].slug.current,mobile[0].name,mobile[0].saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
            </div>
             )}
@@ -256,7 +273,7 @@ export default function ProductShow({mobile, type }) {
                        ))}
              </div>
             </div>
-            {openModal && <BuyNow cartitem={mobile[0]} setOpenModal={setOpenModal} />}
+            {openModal && <BuyNow cartitem={items} setOpenModal={setOpenModal} />}
     </div>
   )
 }

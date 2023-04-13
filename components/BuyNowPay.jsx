@@ -55,8 +55,20 @@ export default function BuyNowPay({data, setModalOpen,setOpen}) {
                     delivered:""
                   })
 
+                  await axios.post("https://api.csimarital.in/api/sendmail",{
+                    email:currentUser.email,
+                    name:currentUser.displayName,
+                    orderid:response.razorpay_order_id,
+                    paymentid:response.razorpay_payment_id,
+                    items:data.cartitems,
+                    address:data.address,
+                    date:moment(Date.now()).format('DD-MM-YYYY'),
+                    total:data.amount/100
+               })
+               
+
                  setSuccess(true)
-                
+                 setIsLoading(false);
                  
                }
               },
@@ -77,7 +89,7 @@ export default function BuyNowPay({data, setModalOpen,setOpen}) {
               },
             };
            
-            setIsLoading(false);
+           
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
           } catch (err) {
@@ -90,7 +102,7 @@ export default function BuyNowPay({data, setModalOpen,setOpen}) {
        
     }
     
-console.log(data)
+
 if(!success){
   return (
     <div className='fixed top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-themed2 opacity-95'>
@@ -105,7 +117,12 @@ if(!success){
                <p><span className='text-xs font-bold text-gray-700'>Payment for:</span>&nbsp;&nbsp; {data.cartitems.pname}</p>
                
             </div> 
-              <button onClick={handleClick} className='px-3 py-2 bg-green-500 rounded-md text-white font-bold'>PAY</button>
+            {!isLoading && <button onClick={handleClick} className='px-3 py-2 bg-green-500 rounded-md text-white font-bold'>PAY</button>}
+              {isLoading && (
+                <div className="fixed top-0 bottom-0 right-0 left-0 flex items-center justify-center bg-themed2 opacity-75">
+                    <img src="/logo.png" alt="please wait" className=" w-20 h-16 animate-pulse" />
+               </div>
+              )}
         </div>
         
     </div>
