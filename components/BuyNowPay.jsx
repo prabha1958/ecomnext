@@ -56,7 +56,7 @@ export default function BuyNowPay({data, setModalOpen,setOpen}) {
                     delivered:""
                   })
 
-                  await axios.post("httpS://api.csimarital.in/api/sendmail",{
+                  await axios.post("https://api.csimarital.in/api/sendmail",{
                     email:currentUser.email,
                     name:currentUser.displayName,
                     orderid:response.razorpay_order_id,
