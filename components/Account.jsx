@@ -26,7 +26,7 @@ export default function Account({setAccountOpen}) {
                   <>
                       <p className="text-md font-thin text-themel4 cursor-pointer">{currentUser.displayName}</p>
                       <button onClick={handleClick} className="text-md px-2 py-1 font-thin text-themel4 cursor-pointer">Logout</button>
-                      <Link href="/orders"><p className="text-md font-thin text-themel4 cursor-pointer">Orders</p></Link>
+                      <Link href="/orders"><p onClick={()=>setAccountOpen(false)} className="text-md font-thin text-themel4 cursor-pointer">Orders</p></Link>
                       
 
                   </>

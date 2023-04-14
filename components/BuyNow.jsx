@@ -61,17 +61,8 @@ export default function BuyNow({handleClose, cartitem, setOpenModal}) {
         go()
     },[cartitem])
 
-    const inputs = [
-        userid=>currentUser.uid,
-        uername=>currentUser.displayName,
-        email=>currentUser.email,
-        mobile=>currentUser.mobile,
-        amount=>cartitem.saleprice
-]
 
-   
-
-     const orderCreate = async (inputs)=>{
+     const orderCreate = async ()=>{
          setIsLoading(true)
         if(selAddress.length == 0){
              setNotification("select your default shipping address")
