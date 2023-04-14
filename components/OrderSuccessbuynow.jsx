@@ -13,7 +13,7 @@ export default function Ordersuccessbuynow({data, setSuccess}) {
    }
   return (
     <div className='fixed top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-themed2 opacity-95'>
-        <div className='w-2/3 flex flex-col space-y-2 mx-auto bg-white p-4 rounded-lg '>
+        <div className='w-full lg:w-2/3 flex flex-col space-y-2 mx-auto bg-white p-4 rounded-lg '>
              <div className='w-full m-2 bg-green-100 rounded-lg flex flex-col items-center space-y-2'>
                      <p className='text-3xl font-bold text-green-800 '>Thanks for the purchase</p>
                      <p>The item </p>

@@ -6,6 +6,7 @@ import { db } from "../firebase/config";
 import { useRouter } from "next/router";
 import Ordersuccess from "./Ordersuccess";
 import Ordersuccessbuynow from "./OrderSuccessbuynow";
+import moment from "moment";
 
 export default function BuyNowPay({data, setModalOpen,setOpen}) {
     const [paymentDetails,setPaymentDetails] = useState()
@@ -117,7 +118,7 @@ if(!success){
                <p><span className='text-xs font-bold text-gray-700'>Payment for:</span>&nbsp;&nbsp; {data.cartitems.pname}</p>
                
             </div> 
-            {!isLoading && <button onClick={handleClick} className='px-3 py-2 bg-green-500 rounded-md text-white font-bold'>PAY</button>}
+            {!isLoading && <button  onClick={handleClick} className='px-3 py-2 bg-green-500 rounded-md text-white font-bold'>PAY</button>}
               {isLoading && (
                 <div className="fixed top-0 bottom-0 right-0 left-0 flex items-center justify-center bg-themed2 opacity-75">
                     <img src="/logo.png" alt="please wait" className=" w-20 h-16 animate-pulse" />

@@ -32,6 +32,7 @@ export default function WomenclotheSingle({womenclothe }) {
     const [reviews,setReviews] = useState([])
     const [userreview,setUserreview] = useState([])
     const [openModal,setOpenModal] = useState(false)
+    const [items,setItems] = useState([])
 
    
     useEffect(()=>{
@@ -136,6 +137,22 @@ export default function WomenclotheSingle({womenclothe }) {
       
   }
 
+  const buynow = (mobile)=>{
+
+
+   const cartbox = {
+    pid:mobile._id,
+    userid:currentUser.uid,
+    slug:mobile.slug.current,
+    pname:mobile.name,
+    price:mobile.saleprice
+  }
+   setItems(cartbox)
+   setOpenModal(true)
+ 
+ }
+
+
   return (
     <div className="w-full mt-12 mb-28 ">
         <div className="w-full text-center py-3">
@@ -182,7 +199,7 @@ export default function WomenclotheSingle({womenclothe }) {
             </div>
             {currentUser && (
                   <div className=" flex items-start mt-8 justify-sgart gap-2">
-                  <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>buynow(womenclothe)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                   <button onClick={()=>addToCart(womenclothe._id,currentUser.uid,womenclothe.slug.current,womenclothe.name,womenclothe.saleprice)}  className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
               </div>
             )}
@@ -266,7 +283,7 @@ export default function WomenclotheSingle({womenclothe }) {
                        ))}
              </div>
             </div>
-             {openModal && <BuyNow cartitem={womenclothe} setOpenModal={setOpenModal} />}
+             {openModal && <BuyNow cartitem={items} setOpenModal={setOpenModal} />}
     </div>
   )
 }

@@ -33,6 +33,7 @@ export default function MenclotheSingle({menclothe }) {
     const [reviews,setReviews] = useState([])
     const router = useRouter()
     const [openModal,setOpenModal]= useState(false)
+    const [items, setItems] = useState([])
    
    
     useEffect(()=>{
@@ -135,6 +136,22 @@ export default function MenclotheSingle({menclothe }) {
          
      }
 
+
+     const buynow = (mobile)=>{
+
+
+      const cartbox = {
+       pid:mobile._id,
+       userid:currentUser.uid,
+       slug:mobile.slug.current,
+       pname:mobile.name,
+       price:mobile.saleprice
+     }
+      setItems(cartbox)
+      setOpenModal(true)
+    
+    }
+
     
    
   
@@ -183,7 +200,7 @@ export default function MenclotheSingle({menclothe }) {
             </div>
             {currentUser && (
                 <div className=" flex items-start mt-8 justify-sgart gap-2">
-                <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                <button onClick={()=>buynow(menclothe)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                 <button onClick={()=>addToCart(menclothe._id,currentUser.uid,menclothe.slug.current,menclothe.name,menclothe.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
             </div>
             )}
@@ -247,7 +264,7 @@ export default function MenclotheSingle({menclothe }) {
                        ))}
              </div>
             </div>
-            {openModal && <BuyNow cartitem = {menclothe} setOpenModal={setOpenModal} />}
+            {openModal && <BuyNow cartitem = {items} setOpenModal={setOpenModal} />}
     </div>
   )
 }

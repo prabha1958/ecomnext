@@ -18,6 +18,7 @@ import moment from 'moment'
 import { v4 as uuid } from "uuid";
 import BuyNow from "./BuyNow";
 
+
 export default function ComputerSingle({computer }) {
   
     const builder = imageUrlBuilder(client);
@@ -32,6 +33,7 @@ export default function ComputerSingle({computer }) {
     const [userreview,setUserreview] = useState([])
     const [reviews,setReviews] = useState([])
     const [openModal,setOpenModal]= useState(false)
+    const [items,setItems] = useState([])
     
    
 
@@ -127,6 +129,24 @@ export default function ComputerSingle({computer }) {
             
         }
 
+        const buynow = (mobile)=>{
+
+
+         const cartbox = {
+          pid:mobile._id,
+          userid:currentUser.uid,
+          slug:mobile.slug.current,
+          pname:mobile.name,
+          price:mobile.saleprice
+        }
+         setItems(cartbox)
+         setOpenModal(true)
+       
+       }
+    
+
+
+
 
   
   return (
@@ -174,7 +194,7 @@ export default function ComputerSingle({computer }) {
             </div>
             {currentUser && (
                   <div className=" flex items-start mt-8 justify-sgart gap-2">
-                  <button onClick={()=>setOpenModal(true)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>buynow(computer)} className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                   <button onClick={()=>addToCart(computer._id,currentUser.uid,computer.slug.current,computer.name,computer.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
               </div>
             )}
@@ -238,7 +258,7 @@ export default function ComputerSingle({computer }) {
                        ))}
              </div>
             </div>
-           {openModal && <BuyNow cartitem = {computer} setOpenModal={setOpenModal} />}
+           {openModal && <BuyNow cartitem = {items} setOpenModal={setOpenModal} />}
     </div>
   )
 }
